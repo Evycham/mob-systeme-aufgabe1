@@ -9,16 +9,28 @@ import androidx.appcompat.app.AppCompatActivity
 import net.objecthunter.exp4j.ExpressionBuilder
 
 
+/**
+ * First home task for the subject "Mobile Systeme".
+ *
+ * Simple application which represent calculator. There are only basic functions
+ * such a multiplication, dividing, addition and subtraction
+ *
+ * @author Yurii Gruzevych
+ * Mat. num. = 20367
+ * */
+
 class MainActivity : AppCompatActivity() {
 
-    // globale Variablen
+    /**
+     * Global variables
+     */
     private lateinit var tvDisplay: TextView
-    // Eingabe
+    // input
     private var expression = ""
-    // Letztes Ergebniss
+    // last result
     private var lastResult = ""
-    //
-    private var memory = ""
+    // memory
+    private var memory1 = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +41,12 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    /**
+     * Function for initialization of whole object taken from the XML and also adding functional
+     * */
     fun init(){
+        // display field
         tvDisplay = findViewById<TextView>(R.id.tvDisplay)
-
-
-        val btnMR = findViewById<Button>(R.id.btnMR)
-        val btnMS = findViewById<Button>(R.id.btnMS)
 
         // cleaning
         findViewById<Button>(R.id.btnClean).setOnClickListener{
@@ -77,7 +89,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         // saving
-        findViewById<Button>(R.id.btnMS).setOnClickListener { saveResult() }
+        findViewById<Button>(R.id.btnMS).setOnClickListener { saveMemory() }
+        // loading
+        findViewById<Button>(R.id.btnMR).setOnClickListener { loadMemory() }
     }
     /**
     * Function for the calculating of the input
@@ -169,10 +183,28 @@ class MainActivity : AppCompatActivity() {
     /**
      * Function for saving of the result or just current expression
      * */
-    private fun saveResult(){
+    private fun saveMemory(){
         if(!expression.isEmpty() || tvDisplay.text.toString() != "ERROR"){
-            memory = tvDisplay.text.toString()
+            memory1 = tvDisplay.text.toString()
         }
         Toast.makeText(this, "Your result was successfully saved!", Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Function for loading of the result from local memory
+     * */
+    private fun loadMemory(){
+        if(tvDisplay.text.toString() == "ERROR"){
+            expression = ""
+            updateDisplay(expression)
+        }
+
+        if(!memory1.isEmpty()){
+            expression += memory1
+            updateDisplay(expression)
+            Toast.makeText(this, "The memory was successfully loaded!", Toast.LENGTH_SHORT).show()
+        } else{
+            Toast.makeText(this, "Warning!\nYou haven't save something yet!", Toast.LENGTH_SHORT).show()
+        }
     }
 }
