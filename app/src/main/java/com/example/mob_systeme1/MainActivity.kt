@@ -39,14 +39,23 @@ class MainActivity : AppCompatActivity() {
         val btnMR = findViewById<Button>(R.id.btnMR)
         val btnMS = findViewById<Button>(R.id.btnMS)
 
-
+        // cleaning
         findViewById<Button>(R.id.btnClean).setOnClickListener{
             expression = ""
             lastResult = ""
             updateDisplay(expression)
         }
-        val btnDelete = findViewById<Button>(R.id.btnDelete)
 
+        // backspace
+        findViewById<Button>(R.id.btnDelete).setOnClickListener {
+            if(!expression.isEmpty()){
+                expression.dropLast(1)
+            }
+            // if there is no sybwols left
+            updateDisplay(if(expression.isEmpty()) "0" else expression)
+        }
+
+        // numbers-buttons setup
         buttonSetup(R.id.btn9, "9")
         buttonSetup(R.id.btn8, "8")
         buttonSetup(R.id.btn7, "7")
@@ -57,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         buttonSetup(R.id.btn2, "2")
         buttonSetup(R.id.btn1, "1")
         buttonSetup(R.id.btn0, "0")
+        buttonSetup(R.id.btnDot, ".")
 
-        val btnDot = findViewById<Button>(R.id.btnDot)
 
         val btnDivide = findViewById<Button>(R.id.btnDivide)
         val btnMultiply = findViewById<Button>(R.id.btnMultiply)
@@ -70,7 +79,9 @@ class MainActivity : AppCompatActivity() {
             calculateResult()
         }
     }
-
+    /**
+    * Function for the calculating of the input
+    * */
     private fun calculateResult(){
         if(expression.isEmpty()) return
 
@@ -101,12 +112,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * help-function for the permanent updating of the screen
+     * @param value - the text has to be shown
+     * */
     private fun updateDisplay(value: String){
         tvDisplay.text = value
     }
-    
+
+    /**
+     * function for the setup of all button which are respond for the numbers and a dot
+     * @param buttonId - id of the button to add event listener
+     * @param value - the number which stays on the button
+     * */
     private fun buttonSetup(buttonId: Int, value: String){
         findViewById<Button>(buttonId).setOnClickListener {
+
             if(tvDisplay.text.toString() == "ERROR"){
                 expression = ""
             }
@@ -114,6 +135,10 @@ class MainActivity : AppCompatActivity() {
             if(expression.isNotEmpty() && expression == lastResult){
                 expression = ""
                 lastResult = ""
+            }
+
+            if(value == "." && expression.last() == '.'){
+                return@setOnClickListener
             }
 
             expression += value
