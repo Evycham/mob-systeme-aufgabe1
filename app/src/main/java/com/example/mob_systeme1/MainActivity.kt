@@ -3,13 +3,10 @@ package com.example.mob_systeme1
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import org.w3c.dom.Text
 import net.objecthunter.exp4j.ExpressionBuilder
-import kotlin.math.exp
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,8 +18,7 @@ class MainActivity : AppCompatActivity() {
     // Letztes Ergebniss
     private var lastResult = ""
     //
-    private var memoryMS = ""
-    private var memoryMR = ""
+    private var memory = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         // XML verbunden
         setContentView(R.layout.activity_main)
+        init()
     }
 
     fun init(){
@@ -56,28 +53,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         // numbers-buttons setup
-        buttonSetup(R.id.btn9, "9")
-        buttonSetup(R.id.btn8, "8")
-        buttonSetup(R.id.btn7, "7")
-        buttonSetup(R.id.btn6, "6")
-        buttonSetup(R.id.btn5, "5")
-        buttonSetup(R.id.btn4, "4")
-        buttonSetup(R.id.btn3, "3")
-        buttonSetup(R.id.btn2, "2")
-        buttonSetup(R.id.btn1, "1")
-        buttonSetup(R.id.btn0, "0")
-        buttonSetup(R.id.btnDot, ".")
+        buttonNumbers(R.id.btn9, "9")
+        buttonNumbers(R.id.btn8, "8")
+        buttonNumbers(R.id.btn7, "7")
+        buttonNumbers(R.id.btn6, "6")
+        buttonNumbers(R.id.btn5, "5")
+        buttonNumbers(R.id.btn4, "4")
+        buttonNumbers(R.id.btn3, "3")
+        buttonNumbers(R.id.btn2, "2")
+        buttonNumbers(R.id.btn1, "1")
+        buttonNumbers(R.id.btn0, "0")
+        buttonNumbers(R.id.btnDot, ".")
 
-
-        val btnDivide = findViewById<Button>(R.id.btnDivide)
-        val btnMultiply = findViewById<Button>(R.id.btnMultiply)
-        val btnMinus = findViewById<Button>(R.id.btnMinus)
-        val btnPlus = findViewById<Button>(R.id.btnPlus)
+        // setup of all buttons responding for the operators
+        findViewById<Button>(R.id.btnPlus).setOnClickListener { appendOperator("+") }
+        findViewById<Button>(R.id.btnMinus).setOnClickListener { appendOperator("-") }
+        findViewById<Button>(R.id.btnMultiply).setOnClickListener { appendOperator("*") }
+        findViewById<Button>(R.id.btnDivide).setOnClickListener { appendOperator("/") }
 
         // setup for the "equals" Button
         findViewById<Button>(R.id.btnEquals).setOnClickListener {
             calculateResult()
         }
+
+        // saving
+        findViewById<Button>(R.id.btnMS).setOnClickListener { saveResult() }
     }
     /**
     * Function for the calculating of the input
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * help-function for the permanent updating of the screen
+     * Help-function for the permanent updating of the screen
      * @param value - the text has to be shown
      * */
     private fun updateDisplay(value: String){
@@ -121,11 +121,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * function for the setup of all button which are respond for the numbers and a dot
+     * Function for the setup of all button which are respond for the numbers and a dot
      * @param buttonId - id of the button to add event listener
      * @param value - the number which stays on the button
      * */
-    private fun buttonSetup(buttonId: Int, value: String){
+    private fun buttonNumbers(buttonId: Int, value: String){
         findViewById<Button>(buttonId).setOnClickListener {
 
             if(tvDisplay.text.toString() == "ERROR"){
@@ -144,5 +144,35 @@ class MainActivity : AppCompatActivity() {
             expression += value
             updateDisplay(expression)
         }
+    }
+
+    /**
+     * Function for adding operator. The empty expression allows to put also negative numbers
+     * */
+    private fun appendOperator(operator: String){
+        // if we want to enter negative number
+        if(expression.isEmpty()){
+            if(operator == "-"){
+                expression += operator
+            }
+        }
+
+        // if last char is one of the operators - change
+        val lastChar = expression.last()
+        if(lastChar == '-' || lastChar == '+' || lastChar == '*' || lastChar == '/'){
+            expression.dropLast(1)
+            expression += operator
+            updateDisplay(expression)
+        }
+    }
+
+    /**
+     * Function for saving of the result or just current expression
+     * */
+    private fun saveResult(){
+        if(!expression.isEmpty() || tvDisplay.text.toString() != "ERROR"){
+            memory = tvDisplay.text.toString()
+        }
+        Toast.makeText(this, "Your result was successfully saved!", Toast.LENGTH_SHORT).show()
     }
 }
