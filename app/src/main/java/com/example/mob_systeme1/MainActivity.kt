@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.w3c.dom.Text
 import net.objecthunter.exp4j.ExpressionBuilder
+import kotlin.math.exp
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,19 +40,23 @@ class MainActivity : AppCompatActivity() {
         val btnMS = findViewById<Button>(R.id.btnMS)
 
 
-        val btnClean = findViewById<Button>(R.id.btnClean)
+        findViewById<Button>(R.id.btnClean).setOnClickListener{
+            expression = ""
+            lastResult = ""
+            updateDisplay(expression)
+        }
         val btnDelete = findViewById<Button>(R.id.btnDelete)
 
-        val btn9 = findViewById<Button>(R.id.btn9)
-        val btn8 = findViewById<Button>(R.id.btn8)
-        val btn7 = findViewById<Button>(R.id.btn7)
-        val btn6 = findViewById<Button>(R.id.btn6)
-        val btn5 = findViewById<Button>(R.id.btn5)
-        val btn4 = findViewById<Button>(R.id.btn4)
-        val btn3 = findViewById<Button>(R.id.btn3)
-        val btn2 = findViewById<Button>(R.id.btn2)
-        val btn1 = findViewById<Button>(R.id.btn1)
-        val btn0 = findViewById<Button>(R.id.btn0)
+        buttonSetup(R.id.btn9, "9")
+        buttonSetup(R.id.btn8, "8")
+        buttonSetup(R.id.btn7, "7")
+        buttonSetup(R.id.btn6, "6")
+        buttonSetup(R.id.btn5, "5")
+        buttonSetup(R.id.btn4, "4")
+        buttonSetup(R.id.btn3, "3")
+        buttonSetup(R.id.btn2, "2")
+        buttonSetup(R.id.btn1, "1")
+        buttonSetup(R.id.btn0, "0")
 
         val btnDot = findViewById<Button>(R.id.btnDot)
 
@@ -99,6 +104,20 @@ class MainActivity : AppCompatActivity() {
     private fun updateDisplay(value: String){
         tvDisplay.text = value
     }
+    
+    private fun buttonSetup(buttonId: Int, value: String){
+        findViewById<Button>(buttonId).setOnClickListener {
+            if(tvDisplay.text.toString() == "ERROR"){
+                expression = ""
+            }
 
+            if(expression.isNotEmpty() && expression == lastResult){
+                expression = ""
+                lastResult = ""
+            }
 
+            expression += value
+            updateDisplay(expression)
+        }
+    }
 }
