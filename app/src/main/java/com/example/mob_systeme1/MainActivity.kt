@@ -375,7 +375,7 @@ class MainActivity : AppCompatActivity() {
      * Function for loading of the result from local memory
      * */
     private fun loadMemory(){
-        if(tvDisplay.text.toString() == "ERROR"){
+        if(tvDisplay.text.toString() == "ERROR" || tvDisplay.text.toString() == "0"){
             expression = ""
             updateDisplay(expression)
         }
