@@ -437,10 +437,12 @@ class MainActivity : AppCompatActivity() {
             '-' -> {
                 expression = expression.dropLast(1)
                 expression += '+'
+                updateDisplay(expression)
             }
             '+' -> {
                 expression = expression.dropLast(1)
                 expression += '-'
+                updateDisplay(expression)
             }
             '*' -> return
             '/' -> return
