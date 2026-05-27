@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.menu_sqr -> {
-                trigonometry("sqr")
+                trigonometry("sqrt")
                 return true
             }
 
@@ -401,7 +401,7 @@ class MainActivity : AppCompatActivity() {
             "sin" -> expression += "sin("
             "cos" -> expression += "cos("
             "tan" -> expression += "tan("
-            "sqr" -> expression += "sqr("
+            "sqrt" -> expression += "sqrt("
         }
         updateDisplay(expression)
     }
@@ -522,7 +522,7 @@ class MainActivity : AppCompatActivity() {
         return (expression.endsWith("sin(") ||
             expression.endsWith("cos(") ||
             expression.endsWith("tan(") ||
-            expression.endsWith("sqr(")
+            expression.endsWith("sqrt(")
             )
     }
 
